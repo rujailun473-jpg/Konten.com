@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creator Dashboard App</title>
+    <!-- Menghubungkan file CSS terpisah -->
+    <link rel="stylesheet" href="style.css"> <link rel="manifest" href="manifest.json">  
+</head>
+<body>
+
+    <!-- HALAMAN UTAMA / DASHBOARD -->
+    <div id="dashboardHome">
+        <div class="header">
+            <h1>Halo, Creator! 🎬</h1>
+            <p>Pilih alat bantu clipping & konten Anda di bawah ini:</p>
+        </div>
+
+        <div class="menu-grid">
+            <div class="menu-card" onclick="openTool('textTool')">
+                <h3>📝 Pengecek Teks</h3>
+                <p>Hitung kata & karakter caption</p>
+            </div>
+            <div class="menu-card" onclick="openTool('hookTool')">
+                <h3>⚡ Generator Hook</h3>
+                <p>Ide pembuka video viral</p>
+            </div>
+            <div class="menu-card" onclick="openTool('videoTool')">
+                <h3>✂️ Video Trimmer</h3>
+                <p>Potong video (FFmpeg web)</p>
+            </div>
+            <div class="menu-card" onclick="alert('Menu segera hadir!')">
+                <h3>📊 Statistik</h3>
+                <p>Pantau performa clip</p>
+            </div>
+        </div>
+    </div>
+    <div class="menu-card" onclick="openTool('timestampTool')">
+    <h3>⏱️ Pencatat Timestamp</h3>
+    <p>Catat momen & durasi klip video</p>
+    </div>
+    <!-- FITUR BARU: PENCATAT TIMESTAMP KLIP -->
+    <div id="timestampTool" class="tool-section">
+    <button class="back-btn" onclick="goHome()">← Kembali ke Dashboard</button>
+    <h2>Pencatat Timestamp Klip</h2>
+    <p style="font-size: 13px; color: #666; margin-bottom: 12px;">Catat momen menarik dari video panjang untuk bahan clipping:</p>
+    
+    <div style="margin-bottom: 10px;">
+        <label style="font-size: 12px; font-weight: bold; color: #555;">Judul / Topik Klip:</label>
+        <input type="text" id="clipTitle" placeholder="Contoh: Pembahasan AI masa depan" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 8px; font-size: 14px; margin-top: 4px; box-sizing: border-box;">
+    </div>
+    
+    <div style="display: flex; gap: 10px; margin-bottom: 12px;">
+        <div style="flex: 1;">
+            <label style="font-size: 12px; font-weight: bold; color: #555;">Mulai:</label>
+            <input type="text" id="clipStart" placeholder="01:20" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 8px; font-size: 14px; margin-top: 4px; box-sizing: border-box;">
+        </div>
+        <div style="flex: 1;">
+            <label style="font-size: 12px; font-weight: bold; color: #555;">Selesai:</label>
+            <input type="text" id="clipEnd" placeholder="01:55" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 8px; font-size: 14px; margin-top: 4px; box-sizing: border-box;">
+        </div>
+    </div>
+
+    <button class="btn" id="saveClipBtn">Simpan Catatan Klip</button>
+    <div id="clipNotif" style="text-align: center; font-size: 13px; color: #28a745; margin-top: 8px; height: 15px;"></div>
+
+    <!-- Daftar Klip Tersimpan -->
+    <div style="margin-top: 20px;">
+        <h3 style="font-size: 14px; margin-bottom: 10px; color: #333;">Daftar Klip Tersimpan:</h3>
+        <div id="clipList" style="display: flex; flex-direction: column; gap: 8px; max-height: 200px; overflow-y: auto;">
+            <p style="font-size: 13px; color: #888; font-style: italic;">Belum ada klip yang dicatat.</p>
+        </div>
+    </div>
+    </div>
+
+    <!-- FITUR 1: PENGECEK TEKS -->
+    <div id="textTool" class="tool-section">
+        <button class="back-btn" onclick="goHome()">← Kembali ke Dashboard</button>
+        <h2>Pengecek Teks Kreator</h2>
+        <textarea id="inputText" placeholder="Tulis caption atau hook video di sini..."></textarea>
+        <div class="stats">
+            <span id="wordCount">Kata: 0</span>
+            <span id="charCount">Karakter: 0</span>
+        </div>
+        <button class="btn" id="copyBtn">Salin Teks</button>
+        <div id="notif"></div>
+    </div>
+
+    <!-- FITUR 2: GENERATOR HOOK -->
+    <div id="hookTool" class="tool-section">
+        <button class="back-btn" onclick="goHome()">← Kembali ke Dashboard</button>
+        <h2>Ide Hook Video Cepat</h2>
+        <p style="font-size: 14px; color: #666; margin-bottom: 15px;">Ketuk tombol untuk menyalin kalimat pembuka yang bikin penonton penasaran:</p>
+        <ul style="list-style: none; display: flex; flex-direction: column; gap: 10px;">
+            <li style="background: #f8f9fa; padding: 10px; border-radius: 8px; font-size: 14px; cursor: pointer;" onclick="copyTextDirect('Banyak kreator pemula salah paham tentang hal ini...')">"Banyak kreator pemula salah paham tentang hal ini..."</li>
+            <li style="background: #f8f9fa; padding: 10px; border-radius: 8px; font-size: 14px; cursor: pointer;" onclick="copyTextDirect('Rahasia edit video cepat langsung dari HP tanpa ribet.')">"Rahasia edit video cepat langsung dari HP tanpa ribet."</li>
+        </ul>
+        <div id="hookNotif" style="text-align: center; font-size: 13px; color: #28a745; margin-top: 15px; height: 15px;"></div>
+    </div>
+
+    <!-- FITUR 3: VIDEO TRIMMER PLACEHOLDER -->
+    <div id="videoTool" class="tool-section">
+        <button class="back-btn" onclick="goHome()">← Kembali ke Dashboard</button>
+        <h2>Video Trimmer & Clipper</h2>
+        <p style="font-size: 14px; color: #666; line-height: 1.5;">
+            Di sinilah nanti tempat Anda mengunggah video mentah, memotong durasinya, dan menyesuaikannya ke format 9:16 untuk TikTok/Instagram menggunakan teknologi web FFmpeg.
+        </p>
+    </div>
+
+    <!-- Menghubungkan file JavaScript terpisah -->
+    <script src="script.js"></script>
+</body>
+</html>
+<div class="menu-card" onclick="openTool('hashtagTool')">
+    <h3>#️⃣ Generator Hashtag</h3>
+    <p>Buat hashtag otomatis untuk konten Anda</p>
+</div>
+<!-- FITUR BARU: GENERATOR HASHTAG -->
+<div id="hashtagTool" class="tool-section">
+    <button class="back-btn" onclick="goHome()">← Kembali ke Dashboard</button>
+    <h2>Generator Hashtag Otomatis</h2>
+    <textarea id="hashtagInput" placeholder="Ketik topik video Anda (contoh: bisnis anak muda)..."></textarea>
+    <button class="btn" id="generateBtn">Buat & Salin Hashtag</button>
+    <div id="hashtagOutput" style="margin-top: 15px; font-size: 14px; color: #333; line-height: 1.4;"></div>
+</div>
